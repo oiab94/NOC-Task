@@ -1,23 +1,16 @@
 import { CronJob } from 'cron';
 
-interface CronJobParamenters {
-  cronTime: string;
-  onTick: () => void;
-  start: boolean;
-  timeZone: string;
-}
+type CronTime = string | Date ;
+type OnTick = () => void;
 
 export class CronAdapter {
 
-  public createNewJob( options: CronJobParamenters ) {
-    const { cronTime, onTick, start, timeZone } = options;
+  static executeNewJob( cronTime: CronTime, onTick: OnTick ): CronJob {
+    const job = new CronJob( cronTime, onTick );
 
-    return CronJob.from( {
-      cronTime: cronTime,
-      onTick: onTick,
-      start: start,
-      timeZone: timeZone
-    } );
+    job.start();
+
+    return job;
   }
 
 }

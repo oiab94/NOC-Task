@@ -1,17 +1,15 @@
 import { CronAdapter } from '../plugins/cron.adapter';
+import { CheckService } from '../domain/use-cases/checks/check-service';
 
 export class Server {
 
   static start() {
-    const cronAdapter = new CronAdapter();
-    const job = cronAdapter.createNewJob({
-      cronTime: '* * * * * *',
-      onTick: () => { console.log('Hello, world!') },
-      start: true,
-      timeZone: 'America/Sao_Paulo'
-    });
+    const checkService = new CheckService();
 
-    job.start();
+    CronAdapter.executeNewJob(
+      '*/5 * * * * *',
+      async () => await checkService.execute('https://google.com')
+    );
   }
 
 }
