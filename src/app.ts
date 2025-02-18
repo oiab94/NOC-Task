@@ -9,6 +9,6 @@ import { envs } from './plugins/envs.adapter'
 
 
 function main() {
-  //Server.start();
-  console.log( envs )
+  Server.start();
+  //console.log( envs )
 }

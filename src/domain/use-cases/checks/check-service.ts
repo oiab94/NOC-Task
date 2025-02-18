@@ -20,15 +20,29 @@ export class CheckService implements CheckServiceUseCase {
       }
 
       console.log(`Connection with ${ url } is OK`);
-      const log = new LogEntity( LogSeverityLevel.LOW, `Connection with ${ url } is OK` );
+      const logOptions = {
+        level: LogSeverityLevel.LOW,
+        message: `Connection with ${ url } is OK`,
+        origin: 'CheckService',
+        createdAt: new Date()
+      }
+      const log = new LogEntity( logOptions );
 
       this.logRepository.saveLog( log );
 
       return true;
     } catch ( error: any ) {
+      const fileName = __filename.split('\NOC-Task').pop();
+
       console.error( `Cannot connect with ${ url }` );
 
-      const log = new LogEntity( LogSeverityLevel.HIGH, `Cannot connect with ${ url }` );
+      const logOptions = {
+        level: LogSeverityLevel.LOW,
+        message: `Cannot connect with ${ url }`,
+        origin: fileName || 'CheckService',
+        createdAt: new Date()
+      }
+      const log = new LogEntity( logOptions );
       this.logRepository.saveLog( log );
 
       return false;
