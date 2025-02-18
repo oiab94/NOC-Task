@@ -2,12 +2,23 @@ import { CronAdapter } from '../plugins/cron.adapter';
 import { CheckService } from '../domain/use-cases/checks/check-service';
 import { LogRepositoryImplementation } from '../infraestructure/repositories/log.impl.repository';
 import { FileSystemDataSource } from '../infraestructure/datasources/file-system.datasource';
+import { EmailService } from './email/email.service';
 
 const fileSystemLogRepository = new LogRepositoryImplementation( new FileSystemDataSource() );
 export class Server {
 
   static start() {
     const checkService = new CheckService( fileSystemLogRepository );
+    const emailService = new EmailService();
+
+    emailService.sendMail({
+      to: 'oscar.alonso.994@gmail.com',
+      subject: 'Test de mensaje de logs',
+      htmlBody: `
+        <h1>Logs de los servicios</h1>
+        <h3>adsfasfweqertcvzxbnvdsfniosdfgkdngknsadogisdfgndisfgiodsngkdsiofgd</h3>
+        `
+    });
 
     CronAdapter.executeNewJob(
       '*/5 * * * * *',
