@@ -1,4 +1,5 @@
 import { Server } from './presentation/server'
+import { envs } from './plugins/envs.adapter'
 // FUNCION AUTOINVOCADA
 (
   async () => {
@@ -8,5 +9,6 @@ import { Server } from './presentation/server'
 
 
 function main() {
-  Server.start();
+  //Server.start();
+  console.log( envs )
 }

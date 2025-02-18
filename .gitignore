@@ -2,3 +2,4 @@
 /dist
 /src/test/*.test.ts
 logs
+.env
