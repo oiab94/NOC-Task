@@ -37,7 +37,7 @@ export class CheckService implements CheckServiceUseCase {
       console.error( `Cannot connect with ${ url }` );
 
       const logOptions = {
-        level: LogSeverityLevel.LOW,
+        level: LogSeverityLevel.HIGH,
         message: `Cannot connect with ${ url }`,
         origin: fileName || 'CheckService',
         createdAt: new Date()
