@@ -17,7 +17,11 @@ export class Server {
       htmlBody: `
         <h1>Logs de los servicios</h1>
         <h3>adsfasfweqertcvzxbnvdsfniosdfgkdngknsadogisdfgndisfgiodsngkdsiofgd</h3>
-        `
+        `,
+      attachements: [
+        { filename: 'logs-low.log', path:'./logs/logs-low.log', }, 
+        { filename: 'logs-high.log', path:'./logs/logs-high.log', }, 
+      ]
     });
 
     CronAdapter.executeNewJob(
