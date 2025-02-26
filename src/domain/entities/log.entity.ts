@@ -11,8 +11,6 @@ interface LogEntityOptions {
   origin: string;
 }
 
-
-
 /**
  * LogEntity representa los datos de un log.
  */
@@ -24,17 +22,22 @@ export class LogEntity {
 
   /**
    * Setea los valores de la entidad Log
-   * @param level log level
-   * @param message message to be logged
+   * @param level Indica el nivel de severidad del log
+   * @param message Mensaje que se va a guardar en el log
    */
   constructor( options: LogEntityOptions ) {
     const { level, message, origin, createdAt } = options;
     this.level = level;
     this.message = message;
     this.origin = origin;
-    this.createdAt = createdAt || new Date();
+    this.createdAt = createdAt;
   }
 
+  /**
+   * Convierte un objeto JSON en una instancia de LogEntity
+   * @param json Texto en formato JSON
+   * @returns La instancia de LogEntity
+   */
   static fromJson( json: string ): LogEntity {
     const { level, message, createdAt, origin } = JSON.parse(json);
 

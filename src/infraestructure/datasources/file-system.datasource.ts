@@ -12,6 +12,10 @@ export class FileSystemDataSource implements LogDataSource {
     mkdirSync( this.logPath, { recursive: true } );
   }
 
+  /**
+   * Guarda un log en el sistema de archivos
+   * @param newLog Entidad de log a guardar
+   */
   saveLog( newLog: LogEntity ): void {
     const logAsJson = JSON.stringify(newLog) + '\n';
 
@@ -20,16 +24,21 @@ export class FileSystemDataSource implements LogDataSource {
         appendFileSync( this.allLogsPath, logAsJson, { flag: 'a+' } );
         break ;
       case LogSeverityLevel.MEDIUM :
-        appendFileSync( this.mediumLogsPath, logAsJson, {flag: 'a+'} );
+        appendFileSync( this.mediumLogsPath, logAsJson, { flag: 'a+' } );
         break ;
       case LogSeverityLevel.HIGH :
-        appendFileSync( this.highLogsPath, logAsJson, {flag: 'a+'} );
+        appendFileSync( this.highLogsPath, logAsJson, { flag: 'a+' } );
         break ;
       default:
         throw new Error('Invalid log level');
     }
   }
 
+  /**
+   * Obtiene los logs de un nivel de severidad específico
+   * @param severityLevel Nivel de severidad de los logs a obtener
+   * @returns Lista de logs
+   */
   async getLogs(severityLevel: LogSeverityLevel): Promise<LogEntity[]> {
     switch ( severityLevel ) {
       case LogSeverityLevel.LOW :
@@ -45,7 +54,8 @@ export class FileSystemDataSource implements LogDataSource {
 
   private getLogsFromFile ( path: string ): LogEntity[] {
     const content = readFileSync( path, 'utf-8' );
-    const stringLogs = content.split('\n').map( log => LogEntity.fromJson(log) );
+    const stringLogs = content.split('\n')
+                              .map( log => LogEntity.fromJson(log) );
 
     return stringLogs;
   }

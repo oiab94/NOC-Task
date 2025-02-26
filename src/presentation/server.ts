@@ -9,7 +9,7 @@ export class Server {
 
   static start() {
     const checkService = new CheckService( fileSystemLogRepository );
-    const emailService = new EmailService();
+    const emailService = new EmailService( fileSystemLogRepository );
 
     emailService.sendMail({
       to: 'oscar.alonso.994@gmail.com',
