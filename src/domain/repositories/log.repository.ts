@@ -1,10 +1,12 @@
-import { LogEntity, LogSeverityLevel } from "../entities/log.entity";
+import { LogSeverityLevel, LogEntityOptions } from 'common/types'
+import { LogEntity } from "domain/entities/log.entity";
 
 /**
  * LogRepository define las reglas de negocio para el manejo de los logs entre 
  * la capa de infraestructura y la capa de dominio.
  */
 export abstract class LogRepository {
-  abstract saveLog( log: LogEntity ):  void ;
-  abstract getLogs( severityLevel: LogSeverityLevel ): Promise< LogEntity[] >;
+  abstract createOneLog( options: LogEntityOptions ): LogEntity;
+  abstract saveOneLog( log: LogEntity ): Boolean ;
+  abstract getLogsBySeverityLevel( severityLevel: LogSeverityLevel ): Promise< LogEntity[] >;
 }

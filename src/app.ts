@@ -1,5 +1,5 @@
 import { Server } from './presentation/server'
-import { envs } from './plugins/envs.adapter'
+import { envs } from 'plugins/envs.adapter'
 // FUNCION AUTOINVOCADA
 (
   async () => {

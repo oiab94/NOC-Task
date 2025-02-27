@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
-import { envs } from '../../plugins/envs.adapter';
-import { LogRepository } from '../../domain/repositories/log.repository';
-import { LogEntity, LogSeverityLevel } from '../../domain/entities/log.entity';
+import { envs } from 'plugins/envs.adapter';
+import { LogRepository } from 'domain/repositories/log.repository';
+import { LogEntity } from 'domain/entities/log.entity';
 
 
 interface Attachement {
@@ -44,10 +44,10 @@ export class EmailService {
       const log = new LogEntity({
         origin: 'email.service.ts',
         message:  `Email enviado a ${to} con asunto ${subject}`,
-        level: LogSeverityLevel.LOW,
+        level: 'LOW',
         createdAt: new Date(),
       }); 
-      this.logRepository.saveLog( log );
+      this.logRepository.saveOneLog( log );
 
       console.log(`Email enviado a ${to} con asunto ${subject}`);
       
@@ -57,10 +57,10 @@ export class EmailService {
       const log = new LogEntity({
         origin: 'email.service.ts',
         message:  error.message,
-        level: LogSeverityLevel.HIGH,
+        level: 'HIGH',
         createdAt: new Date(),
       }); 
-      this.logRepository.saveLog( log );
+      this.logRepository.saveOneLog( log );
 
       console.error(error);
 

@@ -1,15 +1,4 @@
-export enum LogSeverityLevel {
-  LOW = 'LOW',
-  MEDIUM = 'MEDIUM',
-  HIGH = 'HIGH',
-}
-
-interface LogEntityOptions {
-  level: LogSeverityLevel;
-  message: string;
-  createdAt: Date;
-  origin: string;
-}
+import { LogSeverityLevel, LogEntityOptions } from 'common/types';
 
 /**
  * LogEntity representa los datos de un log.
@@ -40,13 +29,7 @@ export class LogEntity {
    */
   static fromJson( json: string ): LogEntity {
     const { level, message, createdAt, origin } = JSON.parse(json);
-
-    const options: LogEntityOptions = {
-      level,
-      message,
-      createdAt,
-      origin
-    }
+    const options: LogEntityOptions = { level, message, createdAt, origin }
 
     return new LogEntity( options );
   }

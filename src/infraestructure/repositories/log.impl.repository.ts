@@ -1,6 +1,7 @@
-import { LogDataSource } from "../../domain/datasources/log.datasource";
-import { LogEntity, LogSeverityLevel } from "../../domain/entities/log.entity";
-import { LogRepository } from "../../domain/repositories/log.repository";
+import { LogEntityOptions, LogSeverityLevel } from "common/types";
+import { LogDataSource } from "domain/datasources/log.datasource";
+import { LogEntity } from "domain/entities/log.entity";
+import { LogRepository } from "domain/repositories/log.repository";
 
 /**
  * La implementación de la interfaz LogRepository es la responsable de 
@@ -15,11 +16,15 @@ export class LogRepositoryImplementation implements LogRepository {
     private readonly logDataSource: LogDataSource,
   ) {}
 
-  saveLog(log: LogEntity): void {
-    this.logDataSource.saveLog(log);
+  createOneLog( log: LogEntityOptions ): LogEntity {
+    return this.logDataSource.createOneLog( log );
   }
-  getLogs(severityLevel: LogSeverityLevel): Promise<LogEntity[]> {
-    return this.logDataSource.getLogs(severityLevel);
+
+  saveOneLog(log: LogEntity): Boolean {
+    return this.logDataSource.saveOneLog( log );
+  }
+  getLogsBySeverityLevel( severityLevel: LogSeverityLevel ): Promise< LogEntity[] > {
+    return this.logDataSource.getLogsBySeverityLevel(severityLevel);
   }
 
 }
