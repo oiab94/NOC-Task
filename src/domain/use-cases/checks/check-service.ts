@@ -1,9 +1,10 @@
-import { CheckServiceUseCase, LogEntityOptions } from 'common/types';
-import { LogEntity } from "../../entities/log.entity";
+import { CheckServiceUseCase } from 'common/types';
 import { LogRepository } from "domain/repositories/log.repository";
+import { LogEntity } from "../../entities/log.entity";
 
 
 export class CheckService implements CheckServiceUseCase {
+  private fileName = 'check-service.ts';
 
   constructor(
     private readonly logRepository: LogRepository, 
@@ -11,43 +12,39 @@ export class CheckService implements CheckServiceUseCase {
 
   async execute( url: string ): Promise< boolean > {
     try {
-      const response = await fetch( url );
+      await this.processTheUrl( url ); 
 
-      console.log(response);
-      
+      const log = this.logRepository.createOneLog({
+        level: 'LOW',
+        message: `CONNECT WITH ${ url } OK`,
+        createdAt: new Date(),
+        origin: this.fileName,
+      });
 
-      if ( !response.ok ) { 
-        throw new Error( `FETCH FAILED WITH ${ url } URL` ); 
-      }
+      this.logRepository.saveOneLog( log );
 
-      console.log( { 
-        status: response.ok, 
-        statusCode: response.statusText,
-        mesage: `CONNECT WITH ${ url } SUCCESSFULLY`, 
-        fileName: 'check-service.ts',
-      }  );
+      console.log( LogEntity.toJson( log ) );
 
       return true;
     } catch ( error: any ) {
-      const errorMessage = error instanceof Error ? error.message : `FETCH FAILED WITH ${ url } URL`;
-      console.error( { 
-        status: false, 
-        mesage: `URL ${ url } NOT FOUND` ,
-        message: errorMessage,
-        fileName: 'check-service.ts',
-      }  );
+      const errorLog = this.logRepository.createOneLog({
+        level: 'HIGH', 
+        message: `URL ${ url } NOT FOUND` ,
+        createdAt: new Date(),
+        origin: this.fileName,
+      });
+
+      this.logRepository.saveOneLog( errorLog );
+
+      console.log( LogEntity.toJson( errorLog ) );
 
       return false;
     }
-
   }
 
-  private createOneLog( options: LogEntityOptions  ): LogEntity  {
-    return new LogEntity( options );
+  private async processTheUrl( url: string ): Promise< Response > { 
+    return await fetch( url );
   }
 
-  private saveOneLog( log: LogEntity ): Boolean {
-    return this.logRepository.saveOneLog( log );
-  }
 }
 

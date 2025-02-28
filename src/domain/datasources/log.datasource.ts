@@ -6,6 +6,6 @@ import { LogEntity } from "domain/entities/log.entity";
  */
 export abstract class LogDataSource {
   abstract createOneLog( options: LogEntity ): LogEntity;
-  abstract saveOneLog( log: LogEntity ): Boolean ;
+  abstract saveOneLog( log: LogEntity ): void ;
   abstract getLogsBySeverityLevel( severityLevel: LogSeverityLevel ): Promise< LogEntity[] >;
 }

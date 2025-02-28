@@ -33,4 +33,8 @@ export class LogEntity {
 
     return new LogEntity( options );
   }
+
+  static toJson( log: LogEntity ): string {
+    return JSON.stringify( log );
+  }
 }

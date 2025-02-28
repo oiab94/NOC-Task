@@ -20,8 +20,8 @@ export class LogRepositoryImplementation implements LogRepository {
     return this.logDataSource.createOneLog( log );
   }
 
-  saveOneLog(log: LogEntity): Boolean {
-    return this.logDataSource.saveOneLog( log );
+  saveOneLog(log: LogEntity): void {
+    this.logDataSource.saveOneLog( log );
   }
   getLogsBySeverityLevel( severityLevel: LogSeverityLevel ): Promise< LogEntity[] > {
     return this.logDataSource.getLogsBySeverityLevel(severityLevel);

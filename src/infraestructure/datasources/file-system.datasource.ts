@@ -26,19 +26,19 @@ export class FileSystemDataSource implements LogDataSource {
    * Guarda un log en el sistema de archivos
    * @param newLog Entidad de log a guardar
    */
-  saveOneLog( newLog: LogEntity ): Boolean {
+  saveOneLog( newLog: LogEntity ): void {
     const logAsJson = JSON.stringify(newLog) + '\n';
 
     switch ( newLog.level ) {
-      case  'LOW':
+      case 'LOW':
         appendFileSync( this.allLogsPath, logAsJson, { flag: 'a+' } );
-        return true;
+        return;
       case 'MEDIUM' :
         appendFileSync( this.mediumLogsPath, logAsJson, { flag: 'a+' } );
-        return true;
+        return;
       case 'HIGH' :
         appendFileSync( this.highLogsPath, logAsJson, { flag: 'a+' } );
-        return true;
+        return;
       default:
         throw new Error(`${ newLog.level } NOT IMPLEMENTED`);
     }

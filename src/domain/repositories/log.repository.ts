@@ -7,6 +7,6 @@ import { LogEntity } from "domain/entities/log.entity";
  */
 export abstract class LogRepository {
   abstract createOneLog( options: LogEntityOptions ): LogEntity;
-  abstract saveOneLog( log: LogEntity ): Boolean ;
+  abstract saveOneLog( log: LogEntity ): void ;
   abstract getLogsBySeverityLevel( severityLevel: LogSeverityLevel ): Promise< LogEntity[] >;
 }
