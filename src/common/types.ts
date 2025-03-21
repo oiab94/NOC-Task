@@ -32,3 +32,17 @@ export interface SendMailOptions {
 export interface EmailServiceUseCase {
   sendMail( options: SendMailOptions ): Promise<boolean>;
 }
+
+//  * LOGGER TYPES
+
+/**
+ * object | number | string
+ */
+export type LoggerType = object | number | string;
+
+export interface LoggerInterface {
+  info: ( message: LoggerType ) => void;
+  error: ( message: LoggerType ) => void;
+  warn: ( message: LoggerType ) => void;
+  debug: ( message: LoggerType ) => void;
+}
