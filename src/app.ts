@@ -1,5 +1,7 @@
+// ! Los environments deben ser cargado primeramente por sobre todo
+import { LoggerAdapter } from './plugins/logger.adapter'
+import { envs } from './plugins/envs.adapter'
 import { Server } from './presentation/server'
-import { envs } from 'plugins/envs.adapter'
 // FUNCION AUTOINVOCADA
 (
   async () => {
@@ -9,6 +11,7 @@ import { envs } from 'plugins/envs.adapter'
 
 
 function main() {
+
   Server.start();
-  //console.log( envs )
+
 }

@@ -1,7 +1,7 @@
+import { EmailServiceUseCase, LoggerInterface, SendMailOptions } from '../../../common/types'
 import { LogEntity } from '../../entities/log.entity';
 import * as nodemailer from 'nodemailer';
 import { envs } from '../../../plugins/envs.adapter';
-import { EmailServiceUseCase, SendMailOptions } from '../../../common/types'
 import { LogRepository } from 'domain/repositories/log.repository';
 
 export class EmailService implements EmailServiceUseCase {
@@ -17,6 +17,7 @@ export class EmailService implements EmailServiceUseCase {
   constructor(
     //TODO: Implementar transporte de nodemailer
     private readonly logRepository: LogRepository,
+    private readonly loggerService: LoggerInterface,
   ) { }
 
   async sendMail( options: SendMailOptions ): Promise<boolean> {
@@ -37,23 +38,20 @@ export class EmailService implements EmailServiceUseCase {
 
       this.logRepository.saveOneLog( log );
 
-      console.log( LogEntity.toJson( log ) );
+      this.loggerService.info( `[ ${this.fileName} ] ${ LogEntity.toJson( log ) }` );
 
       return true;
     } catch ( error: any ) {
-      this.logRepository.saveOneLog({
+      const log = this.logRepository.createOneLog({
         level: 'HIGH',
         message: error.message,
         createdAt: new Date(),
         origin: 'email.service.ts',
       });
       
-      this.logRepository.saveOneLog({
-        level: 'HIGH',
-        message: error.message,
-        createdAt: new Date(),
-        origin: 'email.service.ts',
-      })
+      this.logRepository.saveOneLog( log )
+      
+      this.loggerService.error( `[${this.fileName}] ${ LogEntity.toJson( log ) }` );
 
       return false;
     }

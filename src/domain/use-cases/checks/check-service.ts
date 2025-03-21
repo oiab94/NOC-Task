@@ -1,4 +1,4 @@
-import { CheckServiceUseCase } from 'common/types';
+import { CheckServiceUseCase, LoggerInterface } from 'common/types';
 import { LogRepository } from "domain/repositories/log.repository";
 import { LogEntity } from "../../entities/log.entity";
 
@@ -8,6 +8,7 @@ export class CheckService implements CheckServiceUseCase {
 
   constructor(
     private readonly logRepository: LogRepository, 
+    private readonly loggerService: LoggerInterface,
   ) { }
 
   async execute( url: string ): Promise< boolean > {
@@ -23,7 +24,7 @@ export class CheckService implements CheckServiceUseCase {
 
       this.logRepository.saveOneLog( log );
 
-      console.log( LogEntity.toJson( log ) );
+      this.loggerService.info( log );
 
       return true;
     } catch ( error: any ) {
@@ -36,7 +37,7 @@ export class CheckService implements CheckServiceUseCase {
 
       this.logRepository.saveOneLog( errorLog );
 
-      console.log( LogEntity.toJson( errorLog ) );
+      this.loggerService.error( errorLog );
 
       return false;
     }
