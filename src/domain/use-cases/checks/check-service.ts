@@ -24,7 +24,7 @@ export class CheckService implements CheckServiceUseCase {
 
       this.logRepository.saveOneLog( log );
 
-      this.loggerService.info( log );
+      this.loggerService.info( `[${log.origin}] - ${log.message}` );
 
       return true;
     } catch ( error: any ) {
@@ -37,7 +37,7 @@ export class CheckService implements CheckServiceUseCase {
 
       this.logRepository.saveOneLog( errorLog );
 
-      this.loggerService.error( errorLog );
+      this.loggerService.error( `[${errorLog.origin}] - ${errorLog.message}` );
 
       return false;
     }

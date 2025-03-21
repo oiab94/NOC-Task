@@ -38,7 +38,7 @@ export class EmailService implements EmailServiceUseCase {
 
       this.logRepository.saveOneLog( log );
 
-      this.loggerService.info( `[ ${this.fileName} ] ${ LogEntity.toJson( log ) }` );
+      this.loggerService.info( `[ ${ log.origin } ] - ${ log.message }` );
 
       return true;
     } catch ( error: any ) {
@@ -51,7 +51,7 @@ export class EmailService implements EmailServiceUseCase {
       
       this.logRepository.saveOneLog( log )
       
-      this.loggerService.error( `[${this.fileName}] ${ LogEntity.toJson( log ) }` );
+      this.loggerService.error( `[${ log.origin }] - ${ log.message }` );
 
       return false;
     }
