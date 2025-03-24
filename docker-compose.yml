@@ -1,0 +1,18 @@
+volumes:
+  mongo-db-volume:
+    external: true
+
+services:
+  # BASE DE DATOS
+  mongo-db:
+    container_name: ${MONGO_DB_NAME}
+    image: 'mongo:6.0'
+    volumes:
+      - ./mongo-data:/data/db
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_DB_NAME}
+    restart: always
