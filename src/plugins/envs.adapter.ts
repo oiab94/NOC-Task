@@ -9,6 +9,7 @@ export const envs = {
   PROD: env.get('PROD').required().asBool(),
 
   // CONEXION A MONGO
+  MONGO_URL: env.get('MONGO_URL').required().asString(),
   MONGO_DB_NAME: env.get('MONGO_DB_NAME').required().asString(),
   MONGO_USERNAME: env.get('MONGO_USERNAME').required().asString(),
   MONGO_PASSWORD: env.get('MONGO_PASSWORD').required().asString(),

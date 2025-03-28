@@ -1,45 +1,90 @@
-import { CronAdapter } from '../plugins/cron.adapter';
+// ! Los environments deben ser cargado primeramente por sobre todo
+import { MongoDB } from '../config/database/mongo-db';
+import { envs } from '../plugins/envs.adapter';
 import { CheckService } from '../domain/use-cases/checks/check-service';
-import { LogRepositoryImplementation } from '../infraestructure/repositories/log.impl.repository';
+import { EmailService } from '../domain/use-cases/email/email-service';
 import { FileSystemDataSource } from '../infraestructure/datasources/file-system.datasource';
-import { EmailService } from '../domain/use-cases/email/email-service'
+import { LogRepositoryImplementation } from '../infraestructure/repositories/log.impl.repository';
 import { LoggerAdapter } from '../plugins/logger.adapter';
 
 const fileSystemLogRepository = new LogRepositoryImplementation( new FileSystemDataSource() );
 const loggerService = new LoggerAdapter();
+const checkService = new CheckService( fileSystemLogRepository, loggerService );
+const emailService = new EmailService( fileSystemLogRepository, loggerService );
 
 export class Server {
-
   static async start() {
     loggerService.info('------- SERVER STARTED -------');
 
-    const checkService = new CheckService( fileSystemLogRepository, loggerService );
-    const emailService = new EmailService( fileSystemLogRepository, loggerService );
-
-    await checkService.execute('https://localhost:3001/')
-
-    // TODO: Generar los ficheros previos
-    await emailService.sendMail({
-      to: 'oscar.alonso.994@gmail.com',
-      subject: 'Test de mensaje de logs',
-      htmlBody: `
-        <h1>Logs de los servicios</h1>
-        <h3>adsfasfweqertcvzxbnvdsfniosdfgkdngknsadogisdfgndisfgiodsngkdsiofgd</h3>
-        `,
-      attachements: [
-        { filename: 'logs-low.log', path:'./logs/logs-low.log', }, 
-        { filename: 'logs-high.log', path:'./logs/logs-high.log', }, 
-      ]
-    });
- 
+    this.connectDatabase();
+    // TODO: mejorar la forma de tirar los errores
+    this.runCheckService();
+    this.sendEmail();
+    this.executeCronjob();
     
+    loggerService.info('------- SERVER STOPPED -------');
+  }
+
+  /**
+   * CONNECT WITH DATABASE
+   */
+  private static async connectDatabase() {
+    try {
+      await MongoDB.connect( envs.MONGO_URL, {
+        dbName: envs.MONGO_DB_NAME,
+        user: envs.MONGO_USERNAME,
+        pass: envs.MONGO_PASSWORD,
+      } )
+
+      loggerService.info('Connected to MongoDB')
+    } catch (error) {
+      loggerService.error(`Database connection failed ${ error }`);
+
+      throw error;
+    }
+  }
+
+  /**
+   * CHECK SERVICE 
+   * */
+  private static async runCheckService() {
+    try {
+      await checkService.execute('https://localhost:3001/')
+
+      loggerService.info('Check service executed successfully');
+    } catch (error) {
+      loggerService.error(`Check service failed: ${ error }`);
+
+      throw error;
+    }
+  }
+  
+  /**
+   * SEND EMAIL
+   */
+  private static async sendEmail() {
+    // TODO: Generar los ficheros previos
+    // await emailService.sendMail({
+    //   to: 'oscar.alonso.994@gmail.com',
+    //   subject: 'Test de mensaje de logs',
+    //   htmlBody: `
+    //     <h1>Logs de los servicios</h1>
+    //     <h3>adsfasfweqertcvzxbnvdsfniosdfgkdngknsadogisdfgndisfgiodsngkdsiofgd</h3>
+    //     `,
+    //   attachements: [
+    //     { filename: 'logs-low.log', path:'./logs/logs-low.log', }, 
+    //     { filename: 'logs-high.log', path:'./logs/logs-high.log', }, 
+    //   ]
+    // });
+  }
+
+  /**
+   * CRON JOBS
+   */
+  private static async executeCronjob() {
     //CronAdapter.executeNewJob(
     //  '*/5 * * * * *',
     //  async () => await checkService.execute('https://localhost:3000/')
     //);
-    
-    loggerService.info('------- SERVER STOPED -------');
-
   }
-
 }

@@ -46,3 +46,18 @@ export interface LoggerInterface {
   warn: ( message: LoggerType ) => void;
   debug: ( message: LoggerType ) => void;
 }
+
+
+// * CONEXION A BASE DE DATOS MONGO
+export interface MongoConnectionOption {
+  dbName: string,
+  user: string,
+  pass: string
+}
+
+/**
+ * MongoDatabase permite realizar una conexion con la base de datos mongo
+ */
+export abstract class MongoDatabase {
+  static connect: ( url: string, options: MongoConnectionOption ) => void
+}
