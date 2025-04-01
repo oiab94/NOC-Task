@@ -13,14 +13,16 @@ const checkService = new CheckService( fileSystemLogRepository, loggerService );
 const emailService = new EmailService( fileSystemLogRepository, loggerService );
 
 export class Server {
+  private static fileName = 'server.ts';
+
   static async start() {
     loggerService.info('------- SERVER STARTED -------');
 
-    this.connectDatabase();
+    await this.connectDatabase();
     // TODO: mejorar la forma de tirar los errores
-    this.runCheckService();
-    this.sendEmail();
-    this.executeCronjob();
+    await this.runCheckService();
+    await this.sendEmail();
+    await this.executeCronjob();
     
     loggerService.info('------- SERVER STOPPED -------');
   }
@@ -36,7 +38,7 @@ export class Server {
         pass: envs.MONGO_PASSWORD,
       } )
 
-      loggerService.info('Connected to MongoDB')
+      loggerService.info(`[${ this.fileName }] - ${ this.connectDatabase.name } - Executed Successfully `);
     } catch (error) {
       loggerService.error(`Database connection failed ${ error }`);
 
@@ -51,9 +53,9 @@ export class Server {
     try {
       await checkService.execute('https://localhost:3001/')
 
-      loggerService.info('Check service executed successfully');
+      loggerService.info(`[${ this.fileName }] - ${ this.runCheckService.name } - Executed Successfully `);
     } catch (error) {
-      loggerService.error(`Check service failed: ${ error }`);
+      loggerService.error(`[${ this.fileName }]: ERROR ${ error }`);
 
       throw error;
     }
