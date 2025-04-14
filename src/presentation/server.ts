@@ -40,7 +40,7 @@ export class Server {
 
       loggerService.info(`[${ this.fileName }] - ${ this.connectDatabase.name } - Executed Successfully `);
     } catch (error) {
-      loggerService.error(`Database connection failed ${ error }`);
+      loggerService.error(`Database connection failed`);
 
       throw error;
     }
