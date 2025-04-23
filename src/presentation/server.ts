@@ -18,7 +18,7 @@ export class Server {
   static async start() {
     loggerService.info('------- SERVER STARTED -------');
 
-    await this.connectDatabase();
+    // await this.connectDatabase();
     // TODO: mejorar la forma de tirar los errores
     await this.runCheckService();
     await this.sendEmail();

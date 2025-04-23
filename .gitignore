@@ -4,3 +4,4 @@
 logs
 .env
 /mongo-data
+/postgres-data
